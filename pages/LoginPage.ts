@@ -20,8 +20,14 @@ export class LoginPage {
   }
 
   async navigate() {
-    await this.page.goto('https://opensource-demo.orangehrmlive.com/');
+  const baseUrl = process.env.BASE_URL;
+
+  if (!baseUrl) {
+    throw new Error('BASE_URL is not configured in .env');
   }
+
+  await this.page.goto(baseUrl);
+}
 
   async login(username: string, password: string) {
     await this.usernameInput.fill(username);
