@@ -1,20 +1,23 @@
-
-
+import { loginData } from '../test-data/loginData';
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
 test('Verify OrangeHRM login page', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
+  await loginPage.navigate();
+
+  await expect(loginPage.loginHeading).toBeVisible();
 });
 
 test('ADM_LOGIN_001 - Login with valid credentials', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  await page.getByPlaceholder('Username').fill('Admin');
-  await page.getByPlaceholder('Password').fill('admin123');
-
-  await page.getByRole('button', { name: 'Login' }).click();
+  await loginPage.navigate();
+ await loginPage.login(
+  loginData.validUser.username,
+  loginData.validUser.password
+);
 
   await expect(page).toHaveURL(/dashboard/);
   await expect(
@@ -22,63 +25,55 @@ test('ADM_LOGIN_001 - Login with valid credentials', async ({ page }) => {
   ).toBeVisible();
 });
 
-
 test('ADM_LOGIN_002 - Login with invalid password', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  await page.getByPlaceholder('Username').fill('Admin');
-  await page.getByPlaceholder('Password').fill('wrongpassword');
+  await loginPage.navigate();
+ await loginPage.login(
+  loginData.invalidPassword.username,
+  loginData.invalidPassword.password
+);
 
-  await page.getByRole('button', { name: 'Login' }).click();
-
-  await expect(page.getByText('Invalid credentials')).toBeVisible();
+  await expect(loginPage.errorMessage).toBeVisible();
 });
 
 test('ADM_LOGIN_003 - Login with invalid username', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  await page.getByPlaceholder('Username').fill('WrongUser');
-  await page.getByPlaceholder('Password').fill('admin123');
+  await loginPage.navigate();
+  await loginPage.login(
+  loginData.invalidUsername.username,
+  loginData.invalidUsername.password
+);
 
-  await page.getByRole('button', { name: 'Login' }).click();
-
-  await expect(page.getByText('Invalid credentials')).toBeVisible();
+  await expect(loginPage.errorMessage).toBeVisible();
 });
 
-
 test('ADM_LOGIN_004 - Login with empty username and password', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  await page.getByRole('button', { name: 'Login' }).click();
+  await loginPage.navigate();
+  await loginPage.loginButton.click();
 
   await expect(page.getByText('Required').first()).toBeVisible();
   await expect(page.getByText('Required').last()).toBeVisible();
 });
 
-
 test('ADM_LOGIN_005 - Verify user can logout', async ({ page }) => {
-  // Open login page
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+  const loginPage = new LoginPage(page);
 
-  // Login
-  await page.getByPlaceholder('Username').fill('Admin');
-  await page.getByPlaceholder('Password').fill('admin123');
-  await page.getByRole('button', { name: 'Login' }).click();
-
-  // Verify dashboard
+  await loginPage.navigate();
+   await loginPage.login(
+  loginData.validUser.username,
+  loginData.validUser.password
+);
   await expect(page).toHaveURL(/dashboard/);
 
-  // Open user profile menu
   await page.locator('.oxd-userdropdown-tab').click();
-
-  // Click logout
   await page.getByText('Logout', { exact: true }).click();
 
-  // Verify logout
   await expect(page).toHaveURL(/auth\/login/);
-  await expect(
-    page.getByRole('heading', { name: 'Login' })
-  ).toBeVisible();
+  await expect(loginPage.loginHeading).toBeVisible();
 });
 
 
