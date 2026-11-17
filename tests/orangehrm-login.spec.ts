@@ -10,7 +10,7 @@ test('Verify OrangeHRM login page', async ({ page }) => {
   await expect(loginPage.loginHeading).toBeVisible();
 });
 
-test('ADM_LOGIN_001 - Login with valid credentials', async ({ page }) => {
+test('@smoke ADM_LOGIN_001 - Login with valid credentials', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate();
@@ -25,7 +25,7 @@ test('ADM_LOGIN_001 - Login with valid credentials', async ({ page }) => {
   ).toBeVisible();
 });
 
-test('ADM_LOGIN_002 - Login with invalid password', async ({ page }) => {
+test('@regression ADM_LOGIN_002 - Login with invalid password', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate();
@@ -37,7 +37,7 @@ test('ADM_LOGIN_002 - Login with invalid password', async ({ page }) => {
   await expect(loginPage.errorMessage).toBeVisible();
 });
 
-test('ADM_LOGIN_003 - Login with invalid username', async ({ page }) => {
+test('@regression ADM_LOGIN_003 - Login with invalid username', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate();
@@ -49,7 +49,7 @@ test('ADM_LOGIN_003 - Login with invalid username', async ({ page }) => {
   await expect(loginPage.errorMessage).toBeVisible();
 });
 
-test('ADM_LOGIN_004 - Login with empty username and password', async ({ page }) => {
+test('@regression ADM_LOGIN_004 - Login with empty username and password', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate();
@@ -59,7 +59,7 @@ test('ADM_LOGIN_004 - Login with empty username and password', async ({ page }) 
   await expect(page.getByText('Required').last()).toBeVisible();
 });
 
-test('ADM_LOGIN_005 - Verify user can logout', async ({ page }) => {
+test('@regression ADM_LOGIN_005 - Verify user can logout', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate();
@@ -75,6 +75,9 @@ test('ADM_LOGIN_005 - Verify user can logout', async ({ page }) => {
   await expect(page).toHaveURL(/auth\/login/);
   await expect(loginPage.loginHeading).toBeVisible();
 });
+
+
+
 
 
 

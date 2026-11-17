@@ -6,7 +6,7 @@ test('Verify login page using custom fixture', async ({ loginPage }) => {
   await expect(loginPage.loginHeading).toBeVisible();
 });
 
-test('Verify valid login using custom fixture', async ({ loginPage, page }) => {
+test('@smoke Verify valid login using custom fixture', async ({ loginPage, page }) => {
   await loginPage.navigate();
 
  const username = process.env.ADMIN_USERNAME;

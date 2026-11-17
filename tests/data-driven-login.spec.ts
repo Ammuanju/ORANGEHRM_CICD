@@ -24,7 +24,7 @@ const loginScenarios = [
 ];
 
 for (const data of loginScenarios) {
-  test(`Data-driven test - ${data.scenario}`, async ({ page }) => {
+  test(`@regression Data-driven test - ${data.scenario}`, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.navigate();
